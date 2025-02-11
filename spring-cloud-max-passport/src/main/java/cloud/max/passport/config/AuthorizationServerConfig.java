@@ -15,7 +15,7 @@
  */
 package cloud.max.passport.config;
 
-import cloud.xuxiaowei.passport.jose.Jwks;
+import cloud.max.passport.jose.Jwks;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
@@ -68,8 +68,8 @@ public class AuthorizationServerConfig {
 		http
 			.exceptionHandling(exceptions ->
 				exceptions.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
-			)
-			.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+			);
+
 		// @formatter:on
 		return http.build();
 	}
