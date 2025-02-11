@@ -1,5 +1,7 @@
 package cloud.max.passport.controller;
 
+import cloud.max.passport.properties.PassportProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,10 +17,22 @@ import java.util.Map;
 @RestController
 public class IndexRestController {
 
+	private PassportProperties passportProperties;
+
+	@Autowired
+	public void setPassportProperties(PassportProperties passportProperties) {
+		this.passportProperties = passportProperties;
+	}
+
 	@RequestMapping
 	public Map<String, Object> index(HttpServletRequest request, HttpServletResponse response) {
 		Map<String, Object> map = new HashMap<>();
+		String title = passportProperties.getTitle();
+
+		map.put("title", title);
+
 		return map;
+
 	}
 
 }
