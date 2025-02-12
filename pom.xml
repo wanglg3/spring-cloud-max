@@ -23,6 +23,7 @@
         <module>spring-cloud-max-gateway</module>
         <module>spring-cloud-max-dependencies</module>
         <module>spring-cloud-max-passport</module>
+        <module>spring-cloud-max-file</module>
     </modules>
 
 

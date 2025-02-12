@@ -1,0 +1,51 @@
+server:
+  port: ${MAX_FILE_PORT:12000}
+
+spring:
+  application:
+    name: max-file
+
+---
+
+spring:
+  config:
+    import: nacos:max.yml
+  cloud:
+    inetutils:
+      ignored-interfaces:
+        - VMware.*
+        - VirtualBox.*
+    nacos:
+      discovery:
+        server-addr: ${MAX_NACOS_DISCOVERY_SERVER_ADDR:127.0.0.1:8848}
+        namespace: ${MAX_NACOS_DISCOVERY_NAMESPACE:public}
+        metadata:
+          preserved.heart.beat.interval: 1000
+          preserved.heart.beat.timeout: 3000
+          preserved.ip.delete.timeout: 3000
+      config:
+        server-addr: ${MAX_NACOS_CONFIG_SERVER_ADDR:127.0.0.1:8848}
+        namespace: ${MAX_NACOS_CONFIG_NAMESPACE:public}
+        file-extension: yml
+        shared-configs:
+          - data-id: ${spring.application.name}.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+
+logging:
+  level:
+    org.apache.coyote.http11.Http11InputBuffer: debug
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+max:
+  cloud:
+    file:
+      resource-handlers:
+        - add-resource-handler: /local/**
+          add-resource-locations: file:/max-file/   #当前工作目录下的max-file
+
+#          add-resource-locations: file:C:/Users/wanglg3/Desktop/max-file/
