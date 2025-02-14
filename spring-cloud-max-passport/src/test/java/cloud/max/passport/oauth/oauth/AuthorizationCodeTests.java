@@ -1,5 +1,7 @@
-package cloud.max.passport.oauth;
+package cloud.max.passport.oauth.oauth;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
@@ -15,6 +17,8 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -26,10 +30,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * @author xuxiaowei
- * @since 0.0.1
- */
+
 @Slf4j
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -91,13 +92,30 @@ class AuthorizationCodeTests {
 
 		String tokenUrl = String.format("http://127.0.0.1:%d/oauth2/token", serverPort);
 
+		ObjectMapper objectMapper = new ObjectMapper();
+		ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
+
 		Map<?, ?> token = getToken(clientId, clientSecret, code, redirectUri, tokenUrl);
-		log.info("token: {}", token);
+		log.info("token:\n{}", objectWriter.writeValueAsString(token));
+
+		String accessToken = token.get("access_token").toString();
+
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<Map> entity = restTemplate
+			.getForEntity(String.format("http://127.0.0.1:%d?access_token=%s", serverPort, accessToken), Map.class);
+
+		Assert.isTrue(entity.getStatusCodeValue() == 200, "HTTP 状态码不正常");
+
+		Map body = entity.getBody();
+		log.info("\n{}", objectWriter.writeValueAsString(body));
+		String title = body.get("title").toString();
+
+		Assert.isTrue("徐晓伟微服务".equals(title), "title 数据验证失败");
 
 		String refreshToken = token.get("refresh_token").toString();
 
 		Map<?, ?> refresh = refreshToken(clientId, clientSecret, refreshToken, tokenUrl);
-		log.info("refresh: {}", refresh);
+		log.info("refresh:\n{}", objectWriter.writeValueAsString(refresh));
 	}
 
 	private Map<?, ?> getToken(String clientId, String clientSecret, String code, String redirectUri, String tokenUrl) {

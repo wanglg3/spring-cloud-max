@@ -4,6 +4,9 @@ server:
 spring:
   application:
     name: max-gateway
+  profiles:
+    active: ${MAX_GATEWAY_ACTIVE:dev}
+
 
 ---
 
@@ -26,26 +29,31 @@ spring:
       config:
         server-addr: ${MAX_NACOS_CONFIG_SERVER_ADDR:127.0.0.1:8848}
         namespace: ${MAX_NACOS_CONFIG_NAMESPACE:public}
+        file-extension: yml
+        shared-configs:
+          - data-id: ${spring.application.name}.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+
 
 ---
 
-spring:
-  cloud:
-    gateway:
-      discovery:
-        locator:
-          enabled: true
-          lowerCaseServiceId: true
-      routes:
-        - id: passport
-          uri: lb://max-passport
-          predicates:
-            - Path=/passport/**
-          filters:
-            StripPrefix=1
-
-logging:
-  level:
-    org.springframework.cloud.gateway.handler.RoutePredicateHandlerMapping: debug
-    org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler: debug
-    org.springframework.core.codec.CharSequenceEncoder: debug
+#spring:
+#  cloud:
+#    gateway:
+#      discovery:
+#        locator:
+#          enabled: true
+#          lowerCaseServiceId: true
+#      routes:
+#        - id: passport
+#          uri: lb://max-passport
+#          predicates:
+#            - Path=/passport/**
+#          filters:
+#            StripPrefix=1
+#
+#logging:
+#  level:
+#    org.springframework.cloud.gateway.handler.RoutePredicateHandlerMapping: debug
+#    org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler: debug
+#    org.springframework.core.codec.CharSequenceEncoder: debug

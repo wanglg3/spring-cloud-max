@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: max-passport
+  profiles:
+    active: ${MAX_GATEWAY_ACTIVE:dev}
 
 ---
 
@@ -26,12 +28,17 @@ spring:
       config:
         server-addr: ${MAX_NACOS_CONFIG_SERVER_ADDR:127.0.0.1:8848}
         namespace: ${MAX_NACOS_CONFIG_NAMESPACE:public}
+        file-extension: yml
+        shared-configs:
+          - data-id: ${spring.application.name}.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+
 #        file-extension: yml
 #        shared-configs:
 #          - data-id: ${spring.application.name}.${spring.cloud.nacos.config.file-extension}
 #          - data-id: max-passport.yml
 #            refresh: true
-
-logging:
-  level:
-    org.apache.coyote.http11.Http11InputBuffer: debug
+#
+#logging:
+#  level:
+#    org.apache.coyote.http11.Http11InputBuffer: debug

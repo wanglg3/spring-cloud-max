@@ -4,6 +4,9 @@ server:
 spring:
   application:
     name: max-file
+  profiles:
+    active: ${MAX_FILE_ACTIVE:dev}
+
 
 ---
 
@@ -31,21 +34,21 @@ spring:
           - data-id: ${spring.application.name}.${spring.cloud.nacos.config.file-extension}
             refresh: true
 
-logging:
-  level:
-    org.apache.coyote.http11.Http11InputBuffer: debug
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'
-
-max:
-  cloud:
-    file:
-      resource-handlers:
-        - add-resource-handler: /local/**
-          add-resource-locations: file:/max-file/   #当前工作目录下的max-file
+#logging:
+#  level:
+#    org.apache.coyote.http11.Http11InputBuffer: debug
+#
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: '*'
+#
+#max:
+#  cloud:
+#    file:
+#      resource-handlers:
+#        - add-resource-handler: /local/**
+#          add-resource-locations: file:/max-file/   #当前工作目录下的max-file
 
 #          add-resource-locations: file:C:/Users/wanglg3/Desktop/max-file/
