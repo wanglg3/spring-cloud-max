@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        java-version: [ 8, 11, 17, 21 ]
+        java-version: [ 8 ]
         os: [ ubuntu-latest ]
 
     env:
@@ -57,8 +57,8 @@ jobs:
       - name: Init MySQL
         run: |
           mysql --version
-          mysql -u ${MAX_DATABASE_USERNAME} -p${MAX_DATABASE_PASSWORD} --host=${MAX_DATABASE_HOST} ${MAX_DATABASE} < sql/1-nacos-mysql-schema.sql
-          mysql -u ${MAX_DATABASE_USERNAME} -p${MAX_DATABASE_PASSWORD} --host=${MAX_DATABASE_HOST} ${MAX_DATABASE} < sql/2-nacos-mysql-data.sql
+          mysql -u ${MAX_DATABASE_USERNAME} -p${MAX_DATABASE_PASSWORD} --host=${MAX_DATABASE} ${MAX_DATABASE} < sql/1-nacos-mysql-schema.sql
+          mysql -u ${MAX_DATABASE_USERNAME} -p${MAX_DATABASE_PASSWORD} --host=${MAX_DATABASE} ${MAX_DATABASE} < sql/2-nacos-mysql-data.sql
 
       - name: Java version
         run: java -version
