@@ -57,8 +57,8 @@ jobs:
       - name: Init MySQL
         run: |
           mysql --version
-          mysql -u ${MAX_DATABASE_USERNAME} -p${MAX_DATABASE_PASSWORD} --host=${MAX_DATABASE} ${MAX_DATABASE} < sql/1-nacos-mysql-schema.sql
-          mysql -u ${MAX_DATABASE_USERNAME} -p${MAX_DATABASE_PASSWORD} --host=${MAX_DATABASE} ${MAX_DATABASE} < sql/2-nacos-mysql-data.sql
+          mysql -u ${MAX_DATABASE_USERNAME} -p${MAX_DATABASE_PASSWORD} --host=127.0.0.1 ${MAX_DATABASE} < sql/1-nacos-mysql-schema.sql
+          mysql -u ${MAX_DATABASE_USERNAME} -p${MAX_DATABASE_PASSWORD} --host=127.0.0.1 ${MAX_DATABASE} < sql/2-nacos-mysql-data.sql
 
       - name: Java version
         run: java -version
