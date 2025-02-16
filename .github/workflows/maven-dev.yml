@@ -53,12 +53,21 @@ jobs:
           docker ps
           MAX_DATABASE_HOST=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -qf 'ancestor=mysql:8.0.36')`
           echo "MAX_DATABASE_HOST=$MAX_DATABASE_HOST"
+          echo "MAX_DATABASE_HOST=$MAX_DATABASE_HOST" >> $GITHUB_ENV
+          echo ${{ env.MAX_DATABASE_HOST }}
+
+      - name: Get ENV
+        shell: sh
+        run: |
+          echo ${{ env.MAX_DATABASE_HOST }}
+
+
 
       - name: Init MySQL
         run: |
           mysql --version
-          mysql -u ${MAX_DATABASE_USERNAME} -p${MAX_DATABASE_PASSWORD} --host=mysql ${MAX_DATABASE} < sql/1-nacos-mysql-schema.sql
-          mysql -u ${MAX_DATABASE_USERNAME} -p${MAX_DATABASE_PASSWORD} --host=mysql ${MAX_DATABASE} < sql/2-nacos-mysql-data.sql
+          mysql -u ${MAX_DATABASE_USERNAME} -p${MAX_DATABASE_PASSWORD} --host=${{ env.MAX_DATABASE_HOST }} ${MAX_DATABASE} < sql/1-nacos-mysql-schema.sql
+          mysql -u ${MAX_DATABASE_USERNAME} -p${MAX_DATABASE_PASSWORD} --host=${{ env.MAX_DATABASE_HOST }} ${MAX_DATABASE} < sql/2-nacos-mysql-data.sql
 
       - name: Java version
         run: java -version
