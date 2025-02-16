@@ -25,6 +25,7 @@
         <module>spring-cloud-max-passport</module>
         <module>spring-cloud-max-file</module>
         <module>spring-cloud-max-commons</module>
+        <module>nacos</module>
     </modules>
 
 
