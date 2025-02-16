@@ -78,6 +78,8 @@ jobs:
       - name: Build JDK ${{ matrix.java-version }}
         run: mvn -V clean package source:jar -U -DskipTests=true
 
+      - name: Build/Test Nacos
+        run: mvn clean package -U -pl nacos -DskipTests=false
       - name: Run Nacos
         run: |
           nohup java -jar nacos/target/nacos-${{ env.VERSION }}.jar > nohup-nacos.out 2>&1 &
